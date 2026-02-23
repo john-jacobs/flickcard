@@ -96,8 +96,16 @@ button:hover {
   box-shadow: 0 15px 30px -20px #4f46e5;
 }
 
+.card-face p {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
 .card-back {
   transform: rotateY(180deg);
+  background: #f5f3ff;
 }
 
 .flashcard.flipped .card-front {
@@ -108,13 +116,6 @@ button:hover {
   transform: rotateY(360deg);
 }
 
-.prompt {
-  margin: 0;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  color: #4338ca;
-}
 
 .progress {
   margin-top: 0;
