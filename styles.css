@@ -37,40 +37,16 @@ body {
   gap: 1rem;
 }
 
-
-button,
 select {
   font: inherit;
-}
-
-button {
-  border: none;
-  border-radius: 0.75rem;
-  padding: 0.6rem 1rem;
-  background: #4f46e5;
-  color: white;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #4338ca;
+  border: 1px solid #c4b5fd;
+  border-radius: 0.6rem;
+  padding: 0.45rem 0.55rem;
+  background: white;
 }
 
 .card-stage {
-  display: grid;
-  grid-template-columns: auto minmax(220px, 1fr) auto;
-  align-items: center;
-  gap: 1rem;
   margin: 1.5rem 0 0.75rem;
-}
-
-.nav-btn {
-  border-radius: 999px;
-  width: 2.5rem;
-  height: 2.5rem;
-  display: grid;
-  place-items: center;
-  font-size: 1.1rem;
 }
 
 .flashcard {
@@ -78,6 +54,31 @@ button:hover {
   perspective: 1200px;
   position: relative;
   cursor: pointer;
+  isolation: isolate;
+}
+
+.flashcard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  background: linear-gradient(
+    90deg,
+    rgb(248 113 113 / 16%) 0%,
+    rgb(248 113 113 / 8%) 26%,
+    rgb(79 70 229 / 0%) 42%,
+    rgb(79 70 229 / 0%) 58%,
+    rgb(74 222 128 / 8%) 74%,
+    rgb(74 222 128 / 16%) 100%
+  );
+  z-index: 3;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.flashcard:hover::before,
+.flashcard:focus-visible::before {
+  opacity: 0.92;
 }
 
 .card-face {
@@ -116,32 +117,44 @@ button:hover {
   transform: rotateY(360deg);
 }
 
+.card-zones {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: end;
+  padding: 0.85rem;
+  pointer-events: none;
+}
+
+.zone-label {
+  justify-self: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #312e81;
+  background: rgb(255 255 255 / 70%);
+  border: 1px solid rgb(165 180 252 / 55%);
+  border-radius: 999px;
+  padding: 0.25rem 0.55rem;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.flashcard:hover .zone-label,
+.flashcard:focus-visible .zone-label {
+  opacity: 1;
+  transform: translateY(0);
+}
 
 .progress {
   margin-top: 0;
 }
 
-
-select {
-  border: 1px solid #c4b5fd;
-  border-radius: 0.6rem;
-  padding: 0.45rem 0.55rem;
-  background: white;
-}
-
-
 @media (max-width: 700px) {
   .controls {
     flex-direction: column;
     align-items: stretch;
-  }
-
-  .card-stage {
-    grid-template-columns: 1fr;
-  }
-
-  .nav-btn {
-    width: 100%;
-    border-radius: 0.75rem;
   }
 }
