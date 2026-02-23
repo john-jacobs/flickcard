@@ -517,7 +517,8 @@ const state = {
   filteredDeck: "",
   order: [],
   currentIndex: 0,
-  flipped: false
+  flipped: false,
+  lastAnswer: null
 };
 
 const elements = {
@@ -528,7 +529,10 @@ const elements = {
   progress: document.getElementById("progress"),
   leftLabel: document.getElementById("zone-left-label"),
   centerLabel: document.getElementById("zone-center-label"),
-  rightLabel: document.getElementById("zone-right-label")
+  rightLabel: document.getElementById("zone-right-label"),
+  reasonPanel: document.getElementById("reason-panel"),
+  reasonInput: document.getElementById("reason-input"),
+  reasonSubmit: document.getElementById("reason-submit")
 };
 
 initialize();
@@ -563,6 +567,14 @@ function wireEvents() {
     state.flipped = false;
     rebuildOrder();
     renderCard();
+  });
+
+  elements.reasonSubmit.addEventListener("click", submitReason);
+  elements.reasonInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      submitReason();
+    }
   });
 }
 
@@ -638,6 +650,11 @@ function setFlip(isFlipped) {
   state.flipped = isFlipped;
   elements.card.classList.toggle("flipped", state.flipped);
   elements.card.setAttribute("aria-pressed", String(state.flipped));
+  elements.reasonPanel.hidden = !state.flipped;
+  if (!state.flipped) {
+    state.lastAnswer = null;
+    elements.reasonInput.value = "";
+  }
   updateZoneLabels();
 }
 
@@ -647,19 +664,41 @@ function handleCardClick(event) {
   }
 
   const rect = elements.card.getBoundingClientRect();
-  const clickRatio = (event.clientX - rect.left) / rect.width;
+  const safeWidth = Math.max(rect.width, 1);
+  const clickRatio = (event.clientX - rect.left) / safeWidth;
 
   if (clickRatio < 1 / 3) {
-    stepCard(1);
+    if (!state.flipped) {
+      stepCard(1);
+      return;
+    }
+    state.lastAnswer = "did-not-know";
+    elements.reasonInput.focus();
     return;
   }
 
   if (clickRatio > 2 / 3) {
-    stepCard(1);
+    if (!state.flipped) {
+      stepCard(1);
+      return;
+    }
+    state.lastAnswer = "knew-it";
+    elements.reasonInput.focus();
     return;
   }
 
   toggleFlip();
+}
+
+function submitReason() {
+  if (!state.flipped || !state.lastAnswer) {
+    return;
+  }
+
+  // Reserved for future review analytics. We intentionally keep this bounded.
+  const reason = elements.reasonInput.value.trim().slice(0, 240);
+  void reason;
+  stepCard(1);
 }
 
 function updateZoneLabels() {
