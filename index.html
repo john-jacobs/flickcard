@@ -18,10 +18,6 @@
           <label for="deck-filter">Deck</label>
           <select id="deck-filter"></select>
         </div>
-        <div class="button-row">
-          <button id="shuffle-btn" type="button">Shuffle</button>
-          <button id="flip-btn" type="button">Flip card</button>
-        </div>
       </section>
 
       <section class="card-stage" aria-live="polite">
@@ -40,25 +36,6 @@
       </section>
 
       <p id="progress" class="progress"></p>
-
-      <section class="add-card" aria-label="Add flashcard">
-        <h2>Add a card</h2>
-        <form id="add-card-form">
-          <label>
-            Deck name
-            <input id="deck-name" required placeholder="Spanish basics" />
-          </label>
-          <label>
-            Front (new language)
-            <input id="front" required placeholder="Hola" />
-          </label>
-          <label>
-            Back (translation)
-            <input id="back" required placeholder="Hello" />
-          </label>
-          <button type="submit">Add flashcard</button>
-        </form>
-      </section>
     </main>
 
     <script src="app.js" defer></script>

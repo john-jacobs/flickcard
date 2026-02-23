@@ -23,13 +23,7 @@ const elements = {
   backText: document.getElementById("card-back-text"),
   progress: document.getElementById("progress"),
   prevButton: document.getElementById("prev-btn"),
-  nextButton: document.getElementById("next-btn"),
-  flipButton: document.getElementById("flip-btn"),
-  shuffleButton: document.getElementById("shuffle-btn"),
-  form: document.getElementById("add-card-form"),
-  deckNameInput: document.getElementById("deck-name"),
-  frontInput: document.getElementById("front"),
-  backInput: document.getElementById("back")
+  nextButton: document.getElementById("next-btn")
 };
 
 initialize();
@@ -44,8 +38,6 @@ function initialize() {
 function wireEvents() {
   elements.prevButton.addEventListener("click", () => stepCard(-1));
   elements.nextButton.addEventListener("click", () => stepCard(1));
-  elements.flipButton.addEventListener("click", toggleFlip);
-  elements.shuffleButton.addEventListener("click", shuffleCards);
   elements.card.addEventListener("click", toggleFlip);
   elements.card.addEventListener("keydown", (event) => {
     if (event.key === "Enter" || event.key === " ") {
@@ -59,31 +51,6 @@ function wireEvents() {
     state.currentIndex = 0;
     state.flipped = false;
     rebuildOrder();
-    renderCard();
-  });
-
-  elements.form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const deck = elements.deckNameInput.value.trim();
-    const front = elements.frontInput.value.trim();
-    const back = elements.backInput.value.trim();
-
-    if (!deck || !front || !back) {
-      return;
-    }
-
-    state.cards.push({ deck, front, back });
-    saveCards(state.cards);
-
-    if (state.filteredDeck !== "All decks" && state.filteredDeck !== deck) {
-      state.filteredDeck = deck;
-    }
-
-    elements.form.reset();
-    rebuildDeckFilter();
-    rebuildOrder();
-    state.currentIndex = Math.max(0, state.order.length - 1);
-    state.flipped = false;
     renderCard();
   });
 }
@@ -100,10 +67,6 @@ function loadCards() {
   } catch {
     return [...starterCards];
   }
-}
-
-function saveCards(cards) {
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(cards));
 }
 
 function rebuildDeckFilter() {
@@ -142,7 +105,7 @@ function renderCard() {
 
   if (!card) {
     elements.frontText.textContent = "No cards found.";
-    elements.backText.textContent = "Add one below to get started.";
+    elements.backText.textContent = "No cards available in this deck.";
     elements.progress.textContent = "0 / 0";
     setFlip(false);
     return;
@@ -189,19 +152,6 @@ function stepCard(step) {
   } else if (state.currentIndex > lastIndex) {
     state.currentIndex = 0;
   }
-  setFlip(false);
-  renderCard();
-}
-
-function shuffleCards() {
-  if (state.order.length <= 1) {
-    return;
-  }
-  for (let i = state.order.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [state.order[i], state.order[j]] = [state.order[j], state.order[i]];
-  }
-  state.currentIndex = 0;
   setFlip(false);
   renderCard();
 }
