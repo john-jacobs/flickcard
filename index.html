@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flickcard</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="header">
+        <h1>Flickcard</h1>
+        <p>Practice vocabulary with lightweight language flashcards.</p>
+      </header>
+
+      <section class="controls" aria-label="Study controls">
+        <div>
+          <label for="deck-filter">Deck</label>
+          <select id="deck-filter"></select>
+        </div>
+        <div class="button-row">
+          <button id="shuffle-btn" type="button">Shuffle</button>
+          <button id="flip-btn" type="button">Flip card</button>
+        </div>
+      </section>
+
+      <section class="card-stage" aria-live="polite">
+        <button id="prev-btn" class="nav-btn" type="button" aria-label="Previous card">◀</button>
+        <article id="flashcard" class="flashcard" tabindex="0" role="button" aria-pressed="false">
+          <div class="card-face card-front">
+            <h2 class="prompt">Word</h2>
+            <p id="card-front-text"></p>
+          </div>
+          <div class="card-face card-back">
+            <h2 class="prompt">Meaning</h2>
+            <p id="card-back-text"></p>
+          </div>
+        </article>
+        <button id="next-btn" class="nav-btn" type="button" aria-label="Next card">▶</button>
+      </section>
+
+      <p id="progress" class="progress"></p>
+
+      <section class="add-card" aria-label="Add flashcard">
+        <h2>Add a card</h2>
+        <form id="add-card-form">
+          <label>
+            Deck name
+            <input id="deck-name" required placeholder="Spanish basics" />
+          </label>
+          <label>
+            Front (new language)
+            <input id="front" required placeholder="Hola" />
+          </label>
+          <label>
+            Back (translation)
+            <input id="back" required placeholder="Hello" />
+          </label>
+          <button type="submit">Add flashcard</button>
+        </form>
+      </section>
+    </main>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
