@@ -21,7 +21,6 @@
       </section>
 
       <section class="card-stage" aria-live="polite">
-        <button id="prev-btn" class="nav-btn" type="button" aria-label="Previous card">◀</button>
         <article id="flashcard" class="flashcard" tabindex="0" role="button" aria-pressed="false">
           <div class="card-face card-front">
             <p id="card-front-text"></p>
@@ -29,8 +28,12 @@
           <div class="card-face card-back">
             <p id="card-back-text"></p>
           </div>
+          <div class="card-zones" aria-hidden="true">
+            <span id="zone-left-label" class="zone-label"></span>
+            <span id="zone-center-label" class="zone-label"></span>
+            <span id="zone-right-label" class="zone-label"></span>
+          </div>
         </article>
-        <button id="next-btn" class="nav-btn" type="button" aria-label="Next card">▶</button>
       </section>
 
       <p id="progress" class="progress"></p>

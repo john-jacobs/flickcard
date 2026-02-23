@@ -526,8 +526,9 @@ const elements = {
   frontText: document.getElementById("card-front-text"),
   backText: document.getElementById("card-back-text"),
   progress: document.getElementById("progress"),
-  prevButton: document.getElementById("prev-btn"),
-  nextButton: document.getElementById("next-btn")
+  leftLabel: document.getElementById("zone-left-label"),
+  centerLabel: document.getElementById("zone-center-label"),
+  rightLabel: document.getElementById("zone-right-label")
 };
 
 initialize();
@@ -540,13 +541,19 @@ function initialize() {
 }
 
 function wireEvents() {
-  elements.prevButton.addEventListener("click", () => stepCard(-1));
-  elements.nextButton.addEventListener("click", () => stepCard(1));
-  elements.card.addEventListener("click", toggleFlip);
+  elements.card.addEventListener("click", handleCardClick);
   elements.card.addEventListener("keydown", (event) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       toggleFlip();
+    }
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      stepCard(1);
+    }
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      stepCard(-1);
     }
   });
 
@@ -631,6 +638,41 @@ function setFlip(isFlipped) {
   state.flipped = isFlipped;
   elements.card.classList.toggle("flipped", state.flipped);
   elements.card.setAttribute("aria-pressed", String(state.flipped));
+  updateZoneLabels();
+}
+
+function handleCardClick(event) {
+  if (state.order.length === 0) {
+    return;
+  }
+
+  const rect = elements.card.getBoundingClientRect();
+  const clickRatio = (event.clientX - rect.left) / rect.width;
+
+  if (clickRatio < 1 / 3) {
+    stepCard(1);
+    return;
+  }
+
+  if (clickRatio > 2 / 3) {
+    stepCard(1);
+    return;
+  }
+
+  toggleFlip();
+}
+
+function updateZoneLabels() {
+  if (state.flipped) {
+    elements.leftLabel.textContent = "I didn't know";
+    elements.centerLabel.textContent = "Flip";
+    elements.rightLabel.textContent = "I was right";
+    return;
+  }
+
+  elements.leftLabel.textContent = "I don't know";
+  elements.centerLabel.textContent = "Flip";
+  elements.rightLabel.textContent = "I know it";
 }
 
 function toggleFlip() {
