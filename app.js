@@ -514,7 +514,7 @@ const starterCards = [
 
 const state = {
   cards: loadCards(),
-  filteredDeck: "All decks",
+  filteredDeck: "",
   order: [],
   currentIndex: 0,
   flipped: false
@@ -574,7 +574,7 @@ function loadCards() {
 }
 
 function rebuildDeckFilter() {
-  const decks = ["All decks", ...new Set(state.cards.map((card) => card.deck))];
+  const decks = [...new Set(state.cards.map((card) => card.deck))];
 
   elements.deckFilter.innerHTML = "";
   decks.forEach((deck) => {
@@ -588,7 +588,7 @@ function rebuildDeckFilter() {
   });
 
   if (!decks.includes(state.filteredDeck)) {
-    state.filteredDeck = "All decks";
+    state.filteredDeck = decks[0] ?? "";
     elements.deckFilter.value = state.filteredDeck;
   }
 }
@@ -596,12 +596,7 @@ function rebuildDeckFilter() {
 function rebuildOrder() {
   state.order = state.cards
     .map((_, index) => index)
-    .filter((cardIndex) => {
-      if (state.filteredDeck === "All decks") {
-        return true;
-      }
-      return state.cards[cardIndex].deck === state.filteredDeck;
-    });
+    .filter((cardIndex) => state.cards[cardIndex].deck === state.filteredDeck);
 }
 
 function renderCard() {

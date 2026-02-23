@@ -4,7 +4,7 @@ A simple flashcard app for learning new languages.
 
 ## Features
 
-- Browse cards from all decks or one selected deck.
+- Browse cards from one selected deck at a time.
 - Flip cards to reveal translations.
 - Navigate previous/next cards and shuffle the current deck.
 - Add your own cards and save them in browser local storage.
